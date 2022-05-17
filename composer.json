@@ -3,9 +3,11 @@
     "description": "api cbrRu",
     "type": "project",
     "require": {
-        "monolog/monolog": "1.0.*"
+        "twig/twig": "^3.4"
     },
     "autoload": {
-        "psr-0": {"AppName": "src/"}
+        "psr-4": {
+            "App\\": "src"
+        }
     }
 }

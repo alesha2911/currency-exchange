@@ -1,0 +1,30 @@
+<div>
+    <h1 class="tx-center">Валюты<sub>({{ count }})</sub>, котируемые ЦБ РФ </h1>
+
+    <div>
+        <form action="/search" class="tx-center">
+            <span>Пoиск</span>
+            <input placeholder="">
+            <button type="submit">Найти</button>
+        </form>
+
+    </div>
+
+    <div class="wrapper-currencies">
+        {% for currency in currencies %}
+            <div class="currency">
+                <h2 class="currency-header">{{ currency.Name }}</h2>
+                <div class="currency-characteristic">
+                    <div>
+                        <span>NumCode: {{ currency.NumCode }} </span>
+                        <span>CharCode: {{ currency.CharCode }}</span>
+                    </div>
+                    <p>Номинал: {{ currency.Nominal }}</p>
+                    <p>{{ currency.Value }} Руб.</p>
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<link rel="stylesheet" href="/views/assets/css/home.css">

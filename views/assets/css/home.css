@@ -1,0 +1,24 @@
+
+h2 {
+    font-size: 18px;
+}
+
+.tx-center {
+    text-align: center!important;
+}
+.wrapper-currencies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.currency {
+    text-align: center;
+    width: 23%;
+    border: 3px double black;
+
+}
+.currency-header {
+    height: 35px;
+
+}
