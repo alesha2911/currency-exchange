@@ -8,9 +8,9 @@ use function Composer\Autoload\includeFile;
 
 class Router
 {
-    const METHOD_POST = 'post';
+    const METHOD_POST = 'POST';
 
-    const METHOD_GET = 'get';
+    const METHOD_GET = 'GET';
 
     use Singleton;
 
@@ -73,7 +73,9 @@ class Router
             $requestUri = $this->request->getRequestUri();
         }
 
-        foreach ($this->routes[self::METHOD_GET] as $route) {
+        $method = $this->request->getMethod();
+
+        foreach ($this->routes[$method] as $route) {
             if ($route->getPath() == $requestUri) {
                 $method = $route->getControllerMethod();
                 $class = $route->getController();

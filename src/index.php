@@ -22,7 +22,7 @@ assert($router instanceof Router);
 
 $router->get('/', HomeController::class);
 
-$router->post('/current-search', HomeController::class.'@search');
+$router->post('/currency-search', HomeController::class.'@onSearch');
 
 $router->findRoute();
 
