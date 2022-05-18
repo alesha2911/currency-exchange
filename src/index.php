@@ -3,20 +3,28 @@
 use App\Classes\Rout;
 use \App\Classes\Router;
 use \App\Controllers\HomeController;
+use Symfony\Component\HttpFoundation\Request;
 
-// $router = Router::instance();
+function app() {
+    return \Illuminate\Container\Container::getInstance();
+}
+
+$container = app();
+
+$container->singleton('request', fn () => Request::createFromGlobals());
+$container->alias('request', Request::class);
+
+$container->singleton('router', Router::class);
 
 
-$rout = new Rout('get','/', HomeController::class );
+$router = $container->get('router');
+assert($router instanceof Router);
 
-$rout2 = new Rout('get','/test', HomeController::class.'@search' );
+$router->get('/', HomeController::class);
 
-var_dump($rout->getController().'. method: '. $rout->getControllerMethod());
-var_dump($rout2->getController(). $rout2->getControllerMethod());
-//$router->add("/", HomeController::class);
+$router->post('/current-search', HomeController::class.'@search');
 
-
- //$router->findRoute($_SERVER["REQUEST_URI"]);
+$router->findRoute();
 
 // var_dump(\App\Classes\Manager\XmlManager::loadingXmlThroughFile("https://cbr.ru/scripts/XML_daily.asp"));
 

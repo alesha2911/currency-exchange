@@ -4,24 +4,31 @@ use App\Classes\Controller;
 
 class HomeController extends Controller
 {
-
-    /**
-     * HomeController constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    private array $currencies;
 
     public function index()
     {
-        $currencies = \App\Classes\Manager\XmlManager::loadingXmlThroughFile("https://cbr.ru/scripts/XML_daily.asp")['Valute'];
+        $this->prepareCurrencies();
 
-        $this->getTwig()->display('pages/home.twig', ['currencies' => $currencies, 'count' => count($currencies)]);
+        $this->generationPageHome(['currencies' => $this->currencies, 'count' => count($this->currencies)]);
     }
 
     public function search()
     {
+        $this->prepareCurrencies();
 
+        $this->request->request->get();
+    }
+
+
+    private function prepareCurrencies(): void
+    {
+        $this->currencies = \App\Classes\Manager\XmlManager::loadingXmlThroughFile("https://cbr.ru/scripts/XML_daily.asp")['Valute'];
+    }
+
+
+    private function generationPageHome($transmittedData)
+    {
+        $this->getTwig()->display('pages/home.twig', $transmittedData);
     }
 }

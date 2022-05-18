@@ -3,7 +3,9 @@
     "description": "api cbrRu",
     "type": "project",
     "require": {
-        "twig/twig": "^3.4"
+        "twig/twig": "^3.4",
+        "symfony/http-foundation": "^5.4",
+        "illuminate/container": "^8.83"
     },
     "autoload": {
         "psr-4": {

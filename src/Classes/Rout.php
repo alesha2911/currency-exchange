@@ -55,7 +55,7 @@ class Rout
     /**
      * @return mixed|string
      */
-    public function getController()
+    public function getController(): string
     {
         return $this->controller;
     }
@@ -63,7 +63,7 @@ class Rout
     /**
      * @return mixed|string
      */
-    public function getControllerMethod()
+    public function getControllerMethod(): string
     {
         return $this->controllerMethod;
     }

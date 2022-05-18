@@ -2,37 +2,61 @@
 
 
 use App\Classes\Traits\Singleton;
+use App\Controllers\NotFoundPageControllers;
+use Symfony\Component\HttpFoundation\Request;
 use function Composer\Autoload\includeFile;
 
 class Router
 {
+    const METHOD_POST = 'post';
+
+    const METHOD_GET = 'get';
+
     use Singleton;
 
+    private Request $request;
+
     private array $routes = [
-        'post' => [],
-        ''
+        self::METHOD_POST => [],
+        self::METHOD_GET => [],
     ];
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * @param string $route
-     * @param $controller
+     * @param string $controller
+     * @throws \Exception
      */
-    public function add(string $route, string $controller): void
+    public function get(string $route, string $controller): void
     {
-        if (!(array_key_exists($route, $this->routes))) {
-            $this->routes[$route] = $controller;
-        } else {
-            throw new  \Exception("Такой маршрут уже существует");
-        }
-
+        $this->add(self::METHOD_GET, $route, $controller);
     }
 
-    public function adds(array $routes): void
+    /**
+     * @param string $route
+     * @param string $controller
+     * @throws \Exception
+     */
+    public function post(string $route, string $controller): void
     {
-        foreach ($routes as $key => $route) {
-            $this->add($key, $route);
-        }
+        $this->add(self::METHOD_POST, $route, $controller);
     }
+
+    /**
+     * @param string $typeMethod
+     * @param string $route
+     * @param string $controller
+     * @throws \Exception
+     */
+    private function add(string $typeMethod, string $route, string $controller): void
+    {
+        $this->routes[$typeMethod][] = new Rout($typeMethod, $route, $controller);
+    }
+
 
     /**
      * @return array
@@ -43,12 +67,35 @@ class Router
     }
 
 
-    public function findRoute(string $requestUri): void
+    public function findRoute(?string $requestUri = null): void
     {
-        if (array_key_exists($requestUri, $this->routes)) {
-            (new $this->routes[$requestUri])->index();
+        if (!isset($requestUri) || $requestUri === null) {
+            $requestUri = $this->request->getRequestUri();
         }
 
+        foreach ($this->routes[self::METHOD_GET] as $route) {
+            if ($route->getPath() == $requestUri) {
+                $method = $route->getControllerMethod();
+                $class = $route->getController();
+                $obj = app()->make($class);
+                $obj->$method();
+            }
+        }
+
+        // (new NotFoundPageControllers())->index();
+
+    }
+
+
+    private function checkRoutesToMethod(string $typeMethod, string $checkedRoute): bool
+    {
+        foreach ($this->routes[$typeMethod] as $route) {
+            if ($route->getPath() == $checkedRoute) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
